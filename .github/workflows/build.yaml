@@ -23,13 +23,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install playwright pyinstaller
-          playwright install chromium
+          # We don't need to 'playwright install' here because 
+          # the EXE will do it on the user's machine.
 
       - name: Build EXE
-        run: pyinstaller --onefile --clean test3.py
+        # --collect-all playwright is the secret sauce that lets the EXE
+        # run 'playwright install' commands on the target machine.
+        run: pyinstaller --onefile --clean --hidden-import playwright --collect-all playwright test3.py
 
       - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
-          name: windows-exec
+          name: windows-bot-exe
           path: dist/test3.exe
