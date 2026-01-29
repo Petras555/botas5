@@ -1,10 +1,19 @@
 import random
+import subprocess
 from playwright.sync_api import Playwright, sync_playwright, expect
 import time
 import sys
 
 
-
+def ensure_playwright_browsers():
+    """Checks if Chromium is installed; if not, installs it."""
+    print("Checking for browser dependencies...")
+    try:
+        # This command returns 0 if chromium is installed
+        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+        print("Browser check complete.")
+    except Exception as e:
+        print(f"Error installing browsers: {e}")
 
 def random_delay(min_ms=200, max_ms=1000):
     """Sleep for a random interval between min_ms and max_ms milliseconds"""
@@ -214,5 +223,7 @@ def run(playwright: Playwright) -> None:
     # browser.close()
 
 
-with sync_playwright() as playwright:
-    run(playwright)
+if __name__ == "__main__":
+    ensure_playwright_browsers() # Run the check first
+    with sync_playwright() as playwright:
+        run(playwright)
