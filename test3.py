@@ -5,15 +5,15 @@ import time
 import sys
 
 
-def ensure_playwright_browsers():
-    """Checks if Chromium is installed; if not, installs it."""
-    print("Checking for browser dependencies...")
-    try:
-        # This command returns 0 if chromium is installed
-        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
-        print("Browser check complete.")
-    except Exception as e:
-        print(f"Error installing browsers: {e}")
+# def ensure_playwright_browsers():
+#     """Checks if Chromium is installed; if not, installs it."""
+#     print("Checking for browser dependencies...")
+#     try:
+#         # This command returns 0 if chromium is installed
+#         subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+#         print("Browser check complete.")
+#     except Exception as e:
+#         print(f"Error installing browsers: {e}")
 
 def random_delay(min_ms=200, max_ms=1000):
     """Sleep for a random interval between min_ms and max_ms milliseconds"""
@@ -184,10 +184,7 @@ def ataka(page):
         func()
 
 def run(playwright: Playwright) -> None:
-    is_exe = getattr(sys, 'frozen', False)
-    
-    headless_mode = False if is_exe else True
-    browser = playwright.chromium.launch(headless=headless_mode, slow_mo=350)
+    browser = playwright.chromium.launch(headless=False, slow_mo=350)
     context = browser.new_context()
     
     page = context.new_page()
@@ -223,7 +220,5 @@ def run(playwright: Playwright) -> None:
     # browser.close()
 
 
-if __name__ == "__main__":
-    ensure_playwright_browsers() # Run the check first
-    with sync_playwright() as playwright:
-        run(playwright)
+with sync_playwright() as playwright:
+    run(playwright)
