@@ -6,18 +6,6 @@ import time
 import sys
 
 
-def ensure_browsers():
-    """Checks for Chromium; installs it if missing."""
-    print("Step 1: Ziuri NX...")
-    try:
-        # We use the internal playwright module to run the install command
-        # This works even inside a PyInstaller EXE
-        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
-        print("Pavyko Nx.")
-    except Exception as e:
-        print(f"Warning: Automatic browser install failed: {e}")
-        print("The bot will try to continue, but may crash if Chromium is missing.")
-
 def random_delay(min_ms=200, max_ms=1000):
     """Sleep for a random interval between min_ms and max_ms milliseconds"""
     time.sleep(random.uniform(min_ms, max_ms) / 1000)
@@ -234,6 +222,5 @@ def run_bot(playwright: Playwright) -> None:
 
 
 if __name__ == "__main__":
-    ensure_browsers()
     with sync_playwright() as playwright:
         run_bot(playwright)
